@@ -17,16 +17,16 @@
         <header class="header">
             <div class="title-wrapper">
                 <div class="container">
-                    <img src="./images/logo.jpg" :class="{'pull-left logo': clickSingle}" :title="message">
+                    <img src="./images/logo.jpg" :class="clickSingle ? 'pull-left logo': ''" :title="message">
                     <hgroup class="pull-left">
                         <h1>{{message | lowercase | uppercase}}</h1>
                         <h3 :style="{ color: activeColor, fontSize: fontSize + 'px' }">{{memo.split('').reverse().join('')}}</h3>
                     </hgroup>
                     <div id="social-icons" class="pull-right social-icon">
-                        <a href="javascript:void(0)" title="TB  on Facebook" target="_blank">
+                        <a href="javascript:void(0)" title="TB  on Facebook" target="_blank" @click="clickIcon">
                             <img src="./images/facebook.png">{{clickCount +1}}
                         </a>
-                        <a href="javascript:void(0)" title="TB on Google+" target="_blank">
+                        <a href="javascript:void(0)" title="TB on Google+" target="_blank" @mouseover.once="clickIcon" @mouseout.once="clickIcon">
                             <img src="./images/googleplus.png">{{clickSingle ? "ok" : "no"}}
                         </a>
                         </a>
@@ -196,7 +196,14 @@
                 clickSingle: false,
                 activeColor: 'red',
                 fontSize: 24
-            }
+            },
+            methods: {
+                clickIcon: function(event) {
+                    this.clickCount++;
+                    this.clickSingle = !this.clickSingle;
+                    console.log(event.target.tagName);
+                }
+            },
         })
     </script>
 
