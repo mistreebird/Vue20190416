@@ -9,10 +9,15 @@
     <meta name="author" content="TB">
     <title>TB 的Vue2技術分享</title>
     <script src="js/vue.js"></script>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="ltr">
-    <div id="app">
+    <div id="app" v-cloak>
         <!-- Header START -->
         <header class="header">
             <div class="title-wrapper">
@@ -47,25 +52,13 @@
             <div class="row">
                 <section class="col-md-8 content-wrapper">
                     <div id="ctl00_cphBody_divError"></div>
-                    <div id="ctl00_cphBody_PostList1_posts" class="posts">
 
-                        <!-- Article START-->
-                        <template v-for="(article,index) in articles">
-                            <article class="post" id="post0">
-                                <header class="post-header">
-                                    <h2 class="post-title">
-                                        <a :href="article.href">{{article.title}}</a>
-                                    </h2>
-                                </header>
-                                <section class="post-body text">
-                                    <p>{{article.summary}}</p>
-                                    <p>... <a class="more" :href="article.href">繼續閱讀</a> ...</p>
-                                </section>
-                            </article>
-                        </template>
-                        <!-- Article END-->
 
-                    </div>
+                    <!-- Article START-->
+                    <tb-articles :articles="articles"></tb-articles>
+
+                    <!-- Article END-->
+
                 </section>
 
 
@@ -122,6 +115,29 @@
         Vue.filter('uppercase', function(val) {
             return val.toUpperCase();
         });
+
+        Vue.component('tb-articles', {
+            template: `<div id="ctl00_cphBody_PostList1_posts" class="posts">
+                        <template v-for="(article,index) in articles">
+                        <article class="post" id="post0">
+                            <header class="post-header">
+                                <h2 class="post-title">
+                                    <a :href="article.href">{{index + '.' + article.title}}</a>
+                                </h2>
+                            </header>
+                            <section class="post-body text">
+                                <p>{{article.summary}}</p>
+                                <p>... <a class="more" :href="article.href">繼續閱讀</a> ...</p>
+                            </section>
+                        </article>
+                    </template>
+                    </div>`,
+            props: {
+                articles: Array
+            }
+
+        });
+
         var app = new Vue({
             el: "#app",
             data: {
@@ -132,6 +148,7 @@
                 activeColor: 'red',
                 fontSize: 24,
                 inputMessage: 'box',
+                bMounted: true,
                 articles: [{
                     "href": "http://www.accupass.com/event/register/1605230521577328395030",
                     "title": "Vue.js 入門實戰-Accupass 活動通",
